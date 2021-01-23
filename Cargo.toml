@@ -9,6 +9,7 @@ license = "MIT OR Apache-2.0"
 keywords = ["overlap", "string", "str", "intersection"]
 categories = ["text-processing", "algorithms", "no-std"]
 build = "build.rs"
+exclude = [".github/*"]
 
 [build-dependencies]
 autocfg = "1.0.1"
