@@ -43,73 +43,57 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    # - uses: actions-rs/toolchain@v1
-    #   with:
-    #     toolchain: nightly
-    #     override: true
-    # - uses: actions-rs/cargo@v1
-    #   with:
-    #     command: clean
-    # - name: Install grcov
-    #   uses: actions-rs/install@v0.1
-    #   with:
-    #     crate: grcov
-    #     version: latest
-    #     use-tool-cache: true
-    # - uses: actions-rs/cargo@v1
-    #   with:
-    #     command: test
-    #     args: --all-features --no-fail-fast
-    #   env:
-    #     CARGO_INCREMENTAL: '0'
-    #     RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests'
-    #     RUSTDOCFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests'
-    # - name: Generate coverage data
-    #   id: grcov
-    #   # uses: actions-rs/grcov@v0.1
-    #   run: |
-    #     grcov target/debug/ \
-    #         --branch \
-    #         --llvm \
-    #         --source-dir . \
-    #         --output-path lcov.info \
-    #         --ignore='/**' \
-    #         --ignore='C:/**' \
-    #         --ignore='../**' \
-    #         --ignore-not-existing \
-    #         --excl-line "#\\[derive\\(" \
-    #         --excl-br-line "#\\[derive\\(" \
-    #         --excl-start "#\\[cfg\\(test\\)\\]" \
-    #         --excl-br-start "#\\[cfg\\(test\\)\\]" \
-    #         --commit-sha ${{ github.sha }} \
-    #         --service-job-id ${{ github.job }} \
-    #         --service-name "GitHub Actions" \
-    #         --service-number ${{ github.run_id }}
-    # - name: Upload coverage to codecov.io
-    #   uses: codecov/codecov-action@v1
-    #   with:
-    #     file: lcov.info
-    #     fail_ci_if_error: true
     - uses: actions-rs/toolchain@v1
       with:
-        profile: minimal
-        toolchain: stable
+        toolchain: nightly
         override: true
-    - uses: davidB/rust-cargo-make@v1
-    
-    - name: cargo make all-features
-      run: cargo make all-features
-
-    - name: target/kcov cache
-      uses: actions/cache@v2
+    - uses: actions-rs/cargo@v1
       with:
-        path: target/kcov
-        key: ${{ runner.os }}-kcov-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-kcov-${{ hashFiles('**/Cargo.toml') }}
-          ${{ runner.os }}-kcov
-    - name: cargo make coverage
-      run: cargo make coverage --env="FEATURES=--all-features"
-
-    - name: upload coverage
+        command: clean
+    - name: Install grcov
+      uses: actions-rs/install@v0.1
+      with:
+        crate: grcov
+        version: latest
+        use-tool-cache: true
+    - name: Install covfix
+      uses: actions-rs/install@v0.1
+      with:
+        crate: rust-covfix
+        version: latest
+    - uses: actions-rs/cargo@v1
+      with:
+        command: test
+        args: --all-features --no-fail-fast
+      env:
+        CARGO_INCREMENTAL: '0'
+        RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests'
+        RUSTDOCFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests'
+    - name: Generate coverage data
+      id: grcov
+      # uses: actions-rs/grcov@v0.1
+      run: |
+        grcov target/debug/ \
+            --branch \
+            --llvm \
+            --source-dir . \
+            --output-path lcov.info \
+            --ignore='/**' \
+            --ignore='C:/**' \
+            --ignore='../**' \
+            --ignore-not-existing \
+            --excl-line "#\\[derive\\(" \
+            --excl-br-line "#\\[derive\\(" \
+            --excl-start "#\\[cfg\\(test\\)\\]" \
+            --excl-br-start "#\\[cfg\\(test\\)\\]" \
+            --commit-sha ${{ github.sha }} \
+            --service-job-id ${{ github.job }} \
+            --service-name "GitHub Actions" \
+            --service-number ${{ github.run_id }}
+    - run: rust-covfix -o lcov_correct.info lcov.info
+    - name: Upload coverage to codecov.io
       uses: codecov/codecov-action@v1
+      with:
+        # file: ${{ steps.grcov.outputs.report }}
+        file: lcov_correct.info
+        fail_ci_if_error: true
