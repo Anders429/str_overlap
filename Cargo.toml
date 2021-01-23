@@ -8,6 +8,7 @@ repository = "https://github.com/Anders429/str_overlap"
 license = "MIT OR Apache-2.0"
 keywords = ["overlap", "string", "str", "intersection"]
 categories = ["text-processing", "algorithms", "no-std"]
+build = "build.rs"
 
 [build-depenencies]
 autocfg = "1.0.1"
