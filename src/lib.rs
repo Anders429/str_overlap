@@ -36,15 +36,15 @@
 ///
 /// assert_eq!(overlap("abc", "bcd"), "bc");
 /// ```
-pub fn overlap<'a>(left: &str, right: &'a str) -> &'a str {
-    let mut substring = right;
-    while !substring.is_empty() {
-        if left.ends_with(&substring) {
-            break;
+pub fn overlap<'a>(left: &'a str, right: &str) -> &'a str {
+    // TODO: Test for multi-byte characters. Does the following work?
+    // "日本語"
+    for index in left.char_indices().map(|(index, _)| index) {
+        if left.len() - index <= right.len() && left.as_bytes()[index..] == right.as_bytes()[..(left.len() - index)] {
+            return &left[index..];
         }
-        substring = &substring[0..(substring.len() - substring.chars().last().unwrap().len_utf8())];
     }
-    substring
+    ""
 }
 
 #[cfg(test)]
