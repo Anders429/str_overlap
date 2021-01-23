@@ -66,28 +66,27 @@ jobs:
         RUSTDOCFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests'
     - name: Generate coverage data
       id: grcov
-      uses: actions-rs/grcov@v0.1
-      # run: |
-      #   grcov target/debug/ \
-      #       --branch \
-      #       --llvm \
-      #       --source-dir . \
-      #       --output-path lcov.info \
-      #       --ignore='/**' \
-      #       --ignore='C:/**' \
-      #       --ignore='../**' \
-      #       --ignore-not-existing \
-      #       --excl-line "#\\[derive\\(" \
-      #       --excl-br-line "#\\[derive\\(" \
-      #       --excl-start "#\\[cfg\\(test\\)\\]" \
-      #       --excl-br-start "#\\[cfg\\(test\\)\\]" \
-      #       --commit-sha ${{ github.sha }} \
-      #       --service-job-id ${{ github.job }} \
-      #       --service-name "GitHub Actions" \
-      #       --service-number ${{ github.run_id }}
+      # uses: actions-rs/grcov@v0.1
+      run: |
+        grcov target/debug/ \
+            --branch \
+            --llvm \
+            --source-dir . \
+            --output-path lcov.info \
+            --ignore='/**' \
+            --ignore='C:/**' \
+            --ignore='../**' \
+            --ignore-not-existing \
+            --excl-line "#\\[derive\\(" \
+            --excl-br-line "#\\[derive\\(" \
+            --excl-start "#\\[cfg\\(test\\)\\]" \
+            --excl-br-start "#\\[cfg\\(test\\)\\]" \
+            --commit-sha ${{ github.sha }} \
+            --service-job-id ${{ github.job }} \
+            --service-name "GitHub Actions" \
+            --service-number ${{ github.run_id }}
     - name: Upload coverage to codecov.io
       uses: codecov/codecov-action@v1
       with:
-        # file: ${{ steps.grcov.outputs.report }}
         file: lcov.info
         fail_ci_if_error: true
