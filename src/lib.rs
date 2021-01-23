@@ -37,8 +37,6 @@
 /// assert_eq!(overlap("abc", "bcd"), "bc");
 /// ```
 pub fn overlap<'a>(left: &'a str, right: &str) -> &'a str {
-    // TODO: Test for multi-byte characters. Does the following work?
-    // "日本語"
     for index in left.char_indices().map(|(index, _)| index) {
         if left.len() - index <= right.len()
             && left.as_bytes()[index..] == right.as_bytes()[..(left.len() - index)]
