@@ -47,7 +47,7 @@ pub fn overlap<'a>(left: &str, right: &'a str) -> &'a str {
 
 #[cfg(test)]
 mod tests {
-    use crate::overlap;
+    use overlap;
 
     #[test]
     fn test_partial_overlap() {
