@@ -23,6 +23,8 @@
 //! assert_eq!(overlap(s2, s1), "ab");
 //! ```
 
+#![cfg_attr(rustc_1_6, no_std)]
+
 /// Finds the overlap between two string slices.
 ///
 /// The overlap is here defined as the largest substring contained at both the end of `left` and
