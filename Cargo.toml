@@ -2,7 +2,6 @@
 name = "str_overlap"
 version = "0.1.1"
 authors = ["Anders Evensen"]
-edition = "2018"
 description = "A utility function for finding the overlap between two string slices."
 license = "MIT OR Apache-2.0"
 keywords = ["overlap", "string", "str", "intersection"]
