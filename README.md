@@ -12,7 +12,7 @@ To use this crate, call the provided `overlap` function with two string slices i
 right positions.
 
 ```rust
-use string_overlap::overlap;
+use str_overlap::overlap;
 
 assert_eq!(overlap("abc", "bcd"), "bc");
 ```

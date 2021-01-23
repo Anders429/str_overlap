@@ -5,7 +5,7 @@
 //!
 //! # Example Usage
 //! ```
-//! use string_overlap::overlap;
+//! use str_overlap::overlap;
 //!
 //! assert_eq!(overlap("abc", "bcd"), "bc");
 //! ```
@@ -14,7 +14,7 @@
 //! clarity on where the overlapping substring is in relation to the input strings. If evaluation
 //! of overlap is desired on both sides, both can be requested by calling the function twice:
 //! ```
-//! use string_overlap::overlap;
+//! use str_overlap::overlap;
 //!
 //! let s1 = "abcd";
 //! let s2 = "cdab";
@@ -30,7 +30,7 @@
 ///
 /// # Example Usage
 /// ```
-/// use string_overlap::overlap;
+/// use str_overlap::overlap;
 ///
 /// assert_eq!(overlap("abc", "bcd"), "bc");
 /// ```
