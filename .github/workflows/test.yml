@@ -89,5 +89,5 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         # file: ${{ steps.grcov.outputs.report }}
-        file: lcov_correct.info
+        file: lcov.info
         fail_ci_if_error: true
