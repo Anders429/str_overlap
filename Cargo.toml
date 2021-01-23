@@ -10,5 +10,5 @@ keywords = ["overlap", "string", "str", "intersection"]
 categories = ["text-processing", "algorithms", "no-std"]
 build = "build.rs"
 
-[build-depenencies]
+[build-dependencies]
 autocfg = "1.0.1"
