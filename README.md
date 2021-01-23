@@ -1,4 +1,5 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Anders429/str_overlap/Tests)](https://github.com/Anders429/str_overlap/actions)
+[![codecov.io](https://img.shields.io/codecov/c/gh/Anders429/str_overlap)](https://codecov.io/gh/Anders429/str_overlap)
 [![Crates.io](https://img.shields.io/crates/v/str_overlap)](https://crates.io/crates/str_overlap)
 ![Crates.io](https://img.shields.io/crates/l/str_overlap)
 [![Docs.rs](https://docs.rs/str_overlap/badge.svg)](https://docs.rs/str_overlap)
