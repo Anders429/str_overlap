@@ -47,12 +47,20 @@ jobs:
       with:
         toolchain: nightly
         override: true
+    - uses: actions-rs/cargo@v1
+      with:
+        command: clean
     - name: Install grcov
       uses: actions-rs/install@v0.1
       with:
         crate: grcov
         version: latest
         use-tool-cache: true
+    - name: Install covfix
+      uses: actions-rs/install@v0.1
+      with:
+        crate: rust-covfix
+        version: latest
     - uses: actions-rs/cargo@v1
       with:
         command: test
@@ -82,16 +90,10 @@ jobs:
             --service-job-id ${{ github.job }} \
             --service-name "GitHub Actions" \
             --service-number ${{ github.run_id }}
-    - name: Upload coverage as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: lcov.info
-        # path: ${{ steps.grcov.outputs.report }}
-        path: lcov.info
-
+    - run: rust-covfix -o lcov_correct.info lcov.info
     - name: Upload coverage to codecov.io
       uses: codecov/codecov-action@v1
       with:
         # file: ${{ steps.grcov.outputs.report }}
-        file: lcov.info
+        file: lcov_correct.info
         fail_ci_if_error: true
