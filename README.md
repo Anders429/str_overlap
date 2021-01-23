@@ -25,6 +25,10 @@ assert_eq!(overlap("abc", "bcd"), "bc");
 Note that the positions of the string slices matter. The overlap found is the largest substring at
 both the end of the left string slice and the beginning of the right string slice.
 
+## Performance
+The `overlap` function has temporal complexity *O(n)* in the worst case (where no overlap is found),
+where *n* is the length of the first string parameter.
+
 ## Minimum Supported Rust Version
 This crate is guaranteed to compile on stable `rustc 1.0.0` and up.
 
