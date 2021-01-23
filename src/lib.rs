@@ -97,4 +97,9 @@ mod tests {
     fn test_both_empty() {
         assert_eq!(overlap("", ""), "");
     }
+
+    #[test]
+    fn multi_byte() {
+        assert_eq!(overlap("b日本語a", "語a日bc本"), "語a");
+    }
 }
