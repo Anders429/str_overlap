@@ -37,14 +37,14 @@
 /// assert_eq!(overlap("abc", "bcd"), "bc");
 /// ```
 pub fn overlap<'a>(left: &'a str, right: &str) -> &'a str {
-    for index in left.char_indices().map(|(index, _)| index) {
-        if left.len() - index <= right.len()
-            && left.as_bytes()[index..] == right.as_bytes()[..(left.len() - index)]
-        {
-            return &left[index..];
-        }
+    if let Some(index) = left.char_indices().map(|(index, _)| index).find(|index| {
+        left.len() - index <= right.len()
+            && left.as_bytes()[*index..] == right.as_bytes()[..(left.len() - index)]
+    }) {
+        &left[index..]
+    } else {
+        ""
     }
-    ""
 }
 
 #[cfg(test)]
