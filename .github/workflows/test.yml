@@ -96,9 +96,7 @@ jobs:
         toolchain: stable
         override: true
     - uses: davidB/rust-cargo-make@v1
-      with:
-        version: ${{ env.CARGO_MAKE_VERSION }}
-
+    
     - name: cargo make all-features
       run: cargo make all-features
 
