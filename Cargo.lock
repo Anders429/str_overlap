@@ -1,4 +1,4 @@
-[[package]]
+[root]
 name = "str_overlap"
 version = "0.1.1"
 
