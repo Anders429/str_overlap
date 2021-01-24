@@ -21,8 +21,9 @@ jobs:
           - 1.0.0
     steps:
     - uses: actions/checkout@v2
-    - name: Run tests
-      run: cargo test --verbose
+    - uses: actions-rs/cargo@v1
+      with:
+        command: test
 
   no_std:
     runs-on: ubuntu-latest
@@ -34,10 +35,11 @@ jobs:
           - nightly
     steps:
     - uses: actions/checkout@v2
-    - name: Install toolchain
-      run: rustup target add thumbv6m-none-eabi
-    - name: Build
-      run: cargo build --target thumbv6m-none-eabi --verbose
+    - run: rustup target add thumbv6m-none-eabi
+    - uses: actions-rs/cargo@v1
+      with:
+        command: build
+        args: --target thumbv6m-none-eabi --verbose
 
   codecov:
     runs-on: ubuntu-latest
