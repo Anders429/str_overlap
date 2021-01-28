@@ -36,6 +36,7 @@
 ///
 /// assert_eq!(overlap("abc", "bcd"), "bc");
 /// ```
+#[must_use]
 pub fn overlap<'a>(left: &'a str, right: &str) -> &'a str {
     left.char_indices()
         .map(|(index, _)| index)
