@@ -80,6 +80,7 @@ impl Overlap for str {
     ///
     /// assert_eq!("bcd".overlap_start("abc"), "bc");
     /// ```
+    #[must_use]
     fn overlap_start(&self, other: &Self) -> &Self {
         other.char_indices()
             .map(|(index, _)| index)
@@ -100,6 +101,7 @@ impl Overlap for str {
     ///
     /// assert_eq!("abc".overlap_end("bcd"), "bc");
     /// ```
+    #[must_use]
     fn overlap_end(&self, other: &Self) -> &Self {
         self.char_indices()
             .map(|(index, _)| index)
