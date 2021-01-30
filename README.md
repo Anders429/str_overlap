@@ -7,12 +7,28 @@
 [![MSRV](https://img.shields.io/badge/rustc-1.0.0+-yellow.svg)](#minimum-supported-rust-version)
 [![License](https://img.shields.io/crates/l/str_overlap)](#license)
 
-This crate provides a utility function for finding the overlap between two string slices.
+This crate provides methods for finding the overlap between two string slices.
 
-The overlap is here defined as the largest substring contained both at the end of the first
-string slice and the beginning of the second string slice.
+An overlap is here defined as the largest substring contained both at the end of one string slice
+and the beginning of another string slice.
 
 ## Usage
+To use this crate, bring the
+[`Overlap`](https://docs.rs/str_overlap/*/str_overlap//trait.Overlap.html) trait into scope. This
+will provide [`str`](https://doc.rust-lang.org/std/primitive.str.html)s with two methods:
+- [`overlap_start`](https://docs.rs/str_overlap/*/str_overlap//trait.Overlap.html#tymethod.overlap_start) - Finds the overlap at the **start** of the string slice and the **end** of another.
+- [`overlap_end`](https://docs.rs/str_overlap/*/str_overlap//trait.Overlap.html#tymethod.overlap_end) - Finds the overlap at the **end** of the string slice and the **start** of another.
+
+```rust
+use str_overlap::Overlap;
+
+assert_eq!("bcd".overlap_start("abc"), "bc");
+assert_eq!("abc".overlap_end("bcd"), "bc");
+```
+
+The return value of these methods is a string slice, borrowed from the string the method is called
+on. The two methods allows the caller to choose who owns the resulting string slice.
+
 To use this crate, call the provided `overlap` function with two string slices in the left and
 right positions.
 
