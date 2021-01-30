@@ -53,10 +53,34 @@ pub fn overlap<'a>(left: &'a str, right: &str) -> &'a str {
 /// ```
 /// use str_overlap::Overlap;
 /// ```
+///
+/// `Overlap` is implemented on [`str`], which means its methods are usable by `str` and any types
+/// which implement [`Deref<Target = str>`], such as [`String`].
+///
+/// [`Deref<Target = str>`]: core::ops::Deref
+/// [`String`]: https://doc.rust-lang.org/std/string/struct.String.html
 pub trait Overlap {
     /// Returns the overlap found at the start of `self` and the end of `other`.
+    ///
+    /// # Example
+    /// This method can be used through its implementation on [`str`], like so:
+    ///
+    /// ```
+    /// use str_overlap::Overlap;
+    ///
+    /// assert_eq!("bcd".overlap_start("abc"), "bc");
+    /// ```
     fn overlap_start(&self, other: &Self) -> &Self;
     /// Returns the overlap found at the end of `self` and the start of `other`.
+    ///
+    /// # Example
+    /// This method can be used through its implementation on `str`, like so:
+    ///
+    /// ```
+    /// use str_overlap::Overlap;
+    ///
+    /// assert_eq!("abc".overlap_end("bcd"), "bc");
+    /// ```
     fn overlap_end(&self, other: &Self) -> &Self;
 }
 
