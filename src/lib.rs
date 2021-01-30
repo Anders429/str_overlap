@@ -1,27 +1,25 @@
-//! This crate provides a utility function for finding the overlap between two string slices.
+//! This crate provides methods for finding the overlap between two string slices.
 //!
-//! The overlap is here defined as the largest substring contained both at the end of the first
-//! string slice and the beginning of the second string slice.
+//! An overlap is here defined as the largest substring contained both at the end of one string
+//! slice and the beginning of another string slice.
 //!
-//! # Example Usage
+//! The implementation is provided through the [`Overlap`] trait, which is implemented on [`str`].
+//! This allows the user to simply pull the trait into scope and use its methods:
+//!
 //! ```
-//! use str_overlap::overlap;
+//! use str_overlap::Overlap;
 //!
-//! assert_eq!(overlap("abc", "bcd"), "bc");
+//! assert_eq!("bcd".overlap_start("abc"), "bc");
+//! assert_eq!("abc".overlap_end("bcd"), "bc");
 //! ```
 //!
-//! The overlap is not evaluated on both sides of the strings to reduce complexity and maintain
-//! clarity on where the overlapping substring is in relation to the input strings. If evaluation
-//! of overlap is desired on both sides, both can be requested by calling the function twice:
-//! ```
-//! use str_overlap::overlap;
+//! The trait provides two methods: [`overlap_start`] and [`overlap_end`], which find the overlap
+//! at the beginning and end of the first value respectively. The reason for these two methods is
+//! to allow the user to specify ownership of the resulting subvalue, regardless of its overlap
+//! position.
 //!
-//! let s1 = "abcd";
-//! let s2 = "cdab";
-//!
-//! assert_eq!(overlap(s1, s2), "cd");
-//! assert_eq!(overlap(s2, s1), "ab");
-//! ```
+//! [`overlap_end`]: Overlap::overlap_end
+//! [`overlap_start`]: Overlap::overlap_start
 
 #![cfg_attr(rustc_1_6, no_std)]
 
