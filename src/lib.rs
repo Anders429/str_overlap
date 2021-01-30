@@ -168,7 +168,7 @@ mod tests {
     }
 
     #[test]
-    fn self_substring_of_other_start() {        
+    fn self_substring_of_other_start() {
         assert_eq!("bcd".overlap_start("abcd"), "bcd");
     }
 
@@ -203,13 +203,13 @@ mod tests {
     }
 
     #[test]
-    fn other_empty_end () {
+    fn other_empty_end() {
         assert_eq!("abc".overlap_end(""), "");
     }
 
     #[test]
     fn all_empty_start() {
-        assert_eq!("".overlap_end(""), "");        
+        assert_eq!("".overlap_end(""), "");
     }
 
     #[test]
