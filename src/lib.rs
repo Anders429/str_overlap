@@ -36,15 +36,10 @@
 ///
 /// assert_eq!(overlap("abc", "bcd"), "bc");
 /// ```
+#[inline]
 #[must_use]
 pub fn overlap<'a>(left: &'a str, right: &str) -> &'a str {
-    left.char_indices()
-        .map(|(index, _)| index)
-        .find(|index| {
-            left.len() - index <= right.len()
-                && left.as_bytes()[*index..] == right.as_bytes()[..(left.len() - index)]
-        })
-        .map_or("", |index| &left[index..])
+    left.overlap_end(right)
 }
 
 /// Provides methods for finding overlaps between values.
