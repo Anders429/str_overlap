@@ -40,7 +40,7 @@ fn string_overlap_index(left: &str, right: &str) -> usize {
             left.len() - index <= right.len()
                 && left.as_bytes()[*index..] == right.as_bytes()[..(left.len() - index)]
         })
-        .unwrap_or(left.len())
+        .unwrap_or_else(|| left.len())
 }
 
 /// Provides methods for finding overlaps between values.
