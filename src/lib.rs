@@ -23,6 +23,26 @@
 
 #![cfg_attr(rustc_1_6, no_std)]
 
+/// Shared logic for finding the index at which two strings overlap.
+///
+/// The `left` and `right` parameters are, conceptually, defined as follows:
+/// - `left` is the parameter whose suffix will be overlapping
+/// - `right` is the parameter whose prefix will be overlapping
+///
+/// If no overlap exists, the returned index will be the length of `left`. This allows the result to
+/// be used to create an empty slice.
+#[inline]
+#[must_use]
+fn string_overlap_index(left: &str, right: &str) -> usize {
+    left.char_indices()
+        .map(|(index, _)| index)
+        .find(|index| {
+            left.len() - index <= right.len()
+                && left.as_bytes()[*index..] == right.as_bytes()[..(left.len() - index)]
+        })
+        .unwrap_or(left.len())
+}
+
 /// Provides methods for finding overlaps between values.
 ///
 /// This trait provides methods for finding overlaps at both the start and end of `self`. This
@@ -82,13 +102,7 @@ impl Overlap for str {
     /// ```
     #[must_use]
     fn overlap_start(&self, other: &Self) -> &Self {
-        other.char_indices()
-            .map(|(index, _)| index)
-            .find(|index| {
-                other.len() - index <= self.len()
-                    && other.as_bytes()[*index..] == self.as_bytes()[..(other.len() - index)]
-            })
-            .map_or("", |index| &self[..(other.len() - index)])
+        &self[..(other.len() - string_overlap_index(other, self))]
     }
 
     /// Returns the substring which is both the suffix to `self` and the prefix to `other`.
@@ -103,13 +117,7 @@ impl Overlap for str {
     /// ```
     #[must_use]
     fn overlap_end(&self, other: &Self) -> &Self {
-        self.char_indices()
-            .map(|(index, _)| index)
-            .find(|index| {
-                self.len() - index <= other.len()
-                    && self.as_bytes()[*index..] == other.as_bytes()[..(self.len() - index)]
-            })
-            .map_or("", |index| &self[index..])
+        &self[string_overlap_index(self, other)..]
     }
 }
 
