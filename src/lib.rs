@@ -23,23 +23,6 @@
 
 #![cfg_attr(rustc_1_6, no_std)]
 
-/// Finds the overlap between two string slices.
-///
-/// The overlap is here defined as the largest substring contained at both the end of `left` and
-/// the beginning of `right`. If no overlap exists, an empty string is returned.
-///
-/// # Example Usage
-/// ```
-/// use str_overlap::overlap;
-///
-/// assert_eq!(overlap("abc", "bcd"), "bc");
-/// ```
-#[inline]
-#[must_use]
-pub fn overlap<'a>(left: &'a str, right: &str) -> &'a str {
-    left.overlap_end(right)
-}
-
 /// Provides methods for finding overlaps between values.
 ///
 /// This trait provides methods for finding overlaps at both the start and end of `self`. This
@@ -130,62 +113,7 @@ impl Overlap for str {
 
 #[cfg(test)]
 mod tests {
-    use overlap;
     use Overlap;
-
-    // overlap function.
-
-    #[test]
-    fn test_partial_overlap() {
-        assert_eq!(overlap("abc", "bcd"), "bc");
-    }
-
-    #[test]
-    fn test_full_overlap() {
-        assert_eq!(overlap("abc", "abc"), "abc");
-    }
-
-    #[test]
-    fn test_no_overlap() {
-        assert_eq!(overlap("abc", "def"), "");
-    }
-
-    #[test]
-    fn test_right_substring_of_left() {
-        assert_eq!(overlap("abcd", "bcd"), "bcd");
-    }
-
-    #[test]
-    fn test_left_substring_of_right() {
-        assert_eq!(overlap("abc", "abcd"), "abc");
-    }
-
-    #[test]
-    fn test_only_checks_overlap_one_way() {
-        assert_eq!(overlap("bcd", "abc"), "");
-    }
-
-    #[test]
-    fn test_left_empty() {
-        assert_eq!(overlap("", "abc"), "");
-    }
-
-    #[test]
-    fn test_right_empty() {
-        assert_eq!(overlap("abc", ""), "");
-    }
-
-    #[test]
-    fn test_both_empty() {
-        assert_eq!(overlap("", ""), "");
-    }
-
-    #[test]
-    fn multi_byte() {
-        assert_eq!(overlap("b日本語a", "語a日bc本"), "語a");
-    }
-
-    // Overlap trait.
 
     #[test]
     fn partial_overlap_start() {
