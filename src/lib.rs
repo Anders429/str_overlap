@@ -100,6 +100,7 @@ impl Overlap for str {
     ///
     /// assert_eq!("bcd".overlap_start("abc"), "bc");
     /// ```
+    #[inline]
     #[must_use]
     fn overlap_start(&self, other: &Self) -> &Self {
         &self[..(other.len() - string_overlap_index(other, self))]
@@ -115,6 +116,7 @@ impl Overlap for str {
     ///
     /// assert_eq!("abc".overlap_end("bcd"), "bc");
     /// ```
+    #[inline]
     #[must_use]
     fn overlap_end(&self, other: &Self) -> &Self {
         &self[string_overlap_index(self, other)..]
