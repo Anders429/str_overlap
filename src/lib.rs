@@ -21,7 +21,12 @@
 //! [`overlap_end`]: Overlap::overlap_end
 //! [`overlap_start`]: Overlap::overlap_start
 
+#![warn(clippy::nursery)]
+
 #![cfg_attr(rustc_1_6, no_std)]
+
+#[cfg(not(rustc_1_6))]
+extern crate std as core;
 
 /// Shared logic for finding the index at which two strings overlap.
 ///
@@ -38,7 +43,14 @@ fn string_overlap_index(left: &str, right: &str) -> usize {
         .map(|(index, _)| index)
         .find(|index| {
             left.len() - index <= right.len()
-                && left.as_bytes()[*index..] == right.as_bytes()[..(left.len() - index)]
+                && unsafe {
+                    // SAFETY: `index` will always be within `left`'s bounds, and
+                    // `left.len() - index` is always less than or equal to `right.len()`, and
+                    // therefore within `right`'s bounds. Using `get_unchecked()` here provides a
+                    // performance benefit.
+                    left.as_bytes().get_unchecked(*index..)
+                        == right.as_bytes().get_unchecked(..(left.len() - index))
+                }
         })
         .unwrap_or_else(|| left.len())
 }
@@ -103,7 +115,17 @@ impl Overlap for str {
     #[inline]
     #[must_use]
     fn overlap_start(&self, other: &Self) -> &Self {
-        &self[..(other.len() - string_overlap_index(other, self))]
+        unsafe {
+            // SAFETY: The result of `string_overlap_index()` subtracted from `other.len()` will
+            // always be on a character bound of `self`, since it is found by comparing directly the
+            // bytes of the start of `self` and the end of `other`. Therefore, the range will be
+            // within `self`'s bounds and also will uphold `str` invariants.
+            core::str::from_utf8_unchecked(
+                self
+                    .as_bytes()
+                    .get_unchecked(..(other.len() - string_overlap_index(other, self))),
+            )
+        }
     }
 
     /// Returns the substring which is both the suffix to `self` and the prefix to `other`.
@@ -119,7 +141,16 @@ impl Overlap for str {
     #[inline]
     #[must_use]
     fn overlap_end(&self, other: &Self) -> &Self {
-        &self[string_overlap_index(self, other)..]
+        unsafe {
+            // SAFETY: The result of `string_overlap_index()` will always be on a character bound of
+            // `self`, since it is found from running over the CharIndices of `self`. Therefore, the
+            // range will be within `self`'s bounds and also will uphold `str` invariants.
+            core::str::from_utf8_unchecked(
+                self
+                    .as_bytes()
+                    .get_unchecked(string_overlap_index(self, other)..),
+            )
+        }
     }
 }
 
