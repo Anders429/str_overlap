@@ -21,8 +21,6 @@
 //! [`overlap_end`]: Overlap::overlap_end
 //! [`overlap_start`]: Overlap::overlap_start
 
-#![warn(clippy::nursery)]
-
 #![cfg_attr(rustc_1_6, no_std)]
 
 #[cfg(not(rustc_1_6))]
@@ -121,8 +119,7 @@ impl Overlap for str {
             // bytes of the start of `self` and the end of `other`. Therefore, the range will be
             // within `self`'s bounds and also will uphold `str` invariants.
             core::str::from_utf8_unchecked(
-                self
-                    .as_bytes()
+                self.as_bytes()
                     .get_unchecked(..(other.len() - string_overlap_index(other, self))),
             )
         }
@@ -146,8 +143,7 @@ impl Overlap for str {
             // `self`, since it is found from running over the CharIndices of `self`. Therefore, the
             // range will be within `self`'s bounds and also will uphold `str` invariants.
             core::str::from_utf8_unchecked(
-                self
-                    .as_bytes()
+                self.as_bytes()
                     .get_unchecked(string_overlap_index(self, other)..),
             )
         }
