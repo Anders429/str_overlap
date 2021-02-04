@@ -21,6 +21,9 @@
 //! [`overlap_end`]: Overlap::overlap_end
 //! [`overlap_start`]: Overlap::overlap_start
 
+// Since the MSRV is 1.0.0, allowing usage of deprecated items is ok, as the replacements are likely
+// not available in early versions.
+#![allow(deprecated)]
 #![cfg_attr(rustc_1_6, no_std)]
 
 #[cfg(not(rustc_1_6))]
