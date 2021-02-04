@@ -46,8 +46,19 @@ fn string_overlap_index(left: &str, right: &str) -> usize {
                     // `left.len() - index` is always less than or equal to `right.len()`, and
                     // therefore within `right`'s bounds. Using `get_unchecked()` here provides a
                     // performance benefit.
-                    left.as_bytes().get_unchecked(*index..)
-                        == right.as_bytes().get_unchecked(..(left.len() - index))
+
+                        //                 *(left.as_bytes()).get_unchecked(*index..)
+                        // == *(right.as_bytes()).get_unchecked(..(left.len() - index))
+
+                    // SAFETY: `index` is obtained from `left`'s `CharIndices`, so it will always be
+                    // within the bounds of `left`. Additionally, `index` will also always be on
+                    // UTF-8 character bounds of `left`.
+                    left.slice_unchecked(*index, left.len()).as_bytes()
+                    // SAFETY: Since `left.len() - index` is less than or equal to `right.len()`,
+                    // `left.len() - index` will always be within the bounds of `right`.
+                    // Additionally, since the string slice is cast to bytes, we don't need to worry
+                    // about whether the slice occurs on a valid UTF-8 character bound.
+                        == right.slice_unchecked(0, left.len() - index).as_bytes()
                 }
         })
         .unwrap_or_else(|| left.len())
@@ -118,10 +129,7 @@ impl Overlap for str {
             // always be on a character bound of `self`, since it is found by comparing directly the
             // bytes of the start of `self` and the end of `other`. Therefore, the range will be
             // within `self`'s bounds and also will uphold `str` invariants.
-            core::str::from_utf8_unchecked(
-                self.as_bytes()
-                    .get_unchecked(..(other.len() - string_overlap_index(other, self))),
-            )
+            self.slice_unchecked(0, other.len() - string_overlap_index(other, self))
         }
     }
 
@@ -142,10 +150,7 @@ impl Overlap for str {
             // SAFETY: The result of `string_overlap_index()` will always be on a character bound of
             // `self`, since it is found from running over the CharIndices of `self`. Therefore, the
             // range will be within `self`'s bounds and also will uphold `str` invariants.
-            core::str::from_utf8_unchecked(
-                self.as_bytes()
-                    .get_unchecked(string_overlap_index(self, other)..),
-            )
+            self.slice_unchecked(string_overlap_index(self, other), self.len())
         }
     }
 }
