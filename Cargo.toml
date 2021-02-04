@@ -1,6 +1,6 @@
 [package]
 name = "str_overlap"
-version = "0.4.2"
+version = "0.4.3"
 authors = ["Anders Evensen"]
 description = "Methods for finding the overlap between two string slices."
 readme = "README.md"
