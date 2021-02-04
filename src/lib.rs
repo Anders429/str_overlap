@@ -45,14 +45,6 @@ fn string_overlap_index(left: &str, right: &str) -> usize {
         .find(|index| {
             left.len() - index <= right.len()
                 && unsafe {
-                    // SAFETY: `index` will always be within `left`'s bounds, and
-                    // `left.len() - index` is always less than or equal to `right.len()`, and
-                    // therefore within `right`'s bounds. Using `get_unchecked()` here provides a
-                    // performance benefit.
-
-                        //                 *(left.as_bytes()).get_unchecked(*index..)
-                        // == *(right.as_bytes()).get_unchecked(..(left.len() - index))
-
                     // SAFETY: `index` is obtained from `left`'s `CharIndices`, so it will always be
                     // within the bounds of `left`. Additionally, `index` will also always be on
                     // UTF-8 character bounds of `left`.
