@@ -52,8 +52,9 @@ fn string_overlap_index(left: &str, right: &str) -> usize {
                     left.slice_unchecked(*index, left.len())
                     // SAFETY: Since `slice_len - index` is less than or equal to `right.len()`,
                     // `slice_len` will always be within the bounds of `right`. Additionally, since
-                    // the string slice is cast to bytes, we don't need to worry about whether the
-                    // slice occurs on a valid UTF-8 character bound.
+                    // the string slice is simply cast to bytes when checking equality, we don't
+                    // need to worry about whether the slice occurs on a valid UTF-8 character
+                    // bound.
                         == right.slice_unchecked(0, slice_len)
                 }
         })
