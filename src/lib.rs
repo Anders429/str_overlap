@@ -43,17 +43,18 @@ fn string_overlap_index(left: &str, right: &str) -> usize {
     left.char_indices()
         .map(|(index, _)| index)
         .find(|index| {
-            left.len() - index <= right.len()
+            let slice_len = left.len() - index;
+            slice_len <= right.len()
                 && unsafe {
                     // SAFETY: `index` is obtained from `left`'s `CharIndices`, so it will always be
                     // within the bounds of `left`. Additionally, `index` will also always be on
                     // UTF-8 character bounds of `left`.
                     left.slice_unchecked(*index, left.len()).as_bytes()
-                    // SAFETY: Since `left.len() - index` is less than or equal to `right.len()`,
-                    // `left.len() - index` will always be within the bounds of `right`.
-                    // Additionally, since the string slice is cast to bytes, we don't need to worry
-                    // about whether the slice occurs on a valid UTF-8 character bound.
-                        == right.slice_unchecked(0, left.len() - index).as_bytes()
+                    // SAFETY: Since `slice_len - index` is less than or equal to `right.len()`,
+                    // `slice_len` will always be within the bounds of `right`. Additionally, since
+                    // the string slice is cast to bytes, we don't need to worry about whether the
+                    // slice occurs on a valid UTF-8 character bound.
+                        == right.slice_unchecked(0, slice_len).as_bytes()
                 }
         })
         .unwrap_or_else(|| left.len())
